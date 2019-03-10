@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div style="width: 80%" class="col-md-offset-1" >
+    <table class="table">
+        <caption><h2><span class="glyphicon glyphicon-book">&nbsp;</span>我的收藏</h2></caption>
+
+        <tbody>
+        {% for collection_new in collection_news %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('news.detailView') }}?nid={{ collection_new.new.id }}"><img src="{{ collection_new.new.img_url }}" height="150px" width="150px"></a>
+                </td>
+                <td style="vertical-align:middle;">
+
+                    <a href="{{ url_for('news.detailView') }}?nid={{ collection_new.new.id }}" >{{ collection_new.new.title }}</a>
+                </td>
+                <td style="vertical-align:middle;">
+                    <a href="{{ url_for('collection.deleteView') }}?nid={{ collection_new.nid }}">
+                        <button type="button"><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542886045083&di=2845c54a62bfe94d64c16f0d3f0e76db&imgtype=0&src=http%3A%2F%2Fpic.51yuansu.com%2Fpic3%2Fcover%2F01%2F37%2F31%2F5926885a0f374_610.jpg" height="20px" width="20px"></img>取消收藏</button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    </div>
+
+{% endblock %}
+

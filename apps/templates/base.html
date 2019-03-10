@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {#  建议都用动态路由解析  #}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='bootstrap/css/bootstrap.css') }}">
+    {#<link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css">#}
+    <script src="{{ url_for('static',filename='bootstrap/js/jquery-1.12.4.min.js') }}"></script>
+    {#<script  src="/apps/static/bootstrap/js/jquery-1.12.4.min.js"></script>#}
+    <script src="{{ url_for('static',filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    {#<script  src="/apps/static/bootstrap/js/bootstrap.min.js"></script>#}
+    {#  导入CKeditor  #}
+{#    <script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>#}
+    <script  src="//cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>
+    <script>
+        function showTime() {
+            var show_day = new Array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
+            var time = new Date();
+            var year = time.getYear();
+            if (year < 1000) {
+                year += 1900;
+            }
+            var month = time.getMonth();
+            var date = time.getDate();
+            var day = time.getDay();
+            var hour = time.getHours();
+            var minutes = time.getMinutes();
+            var second = time.getSeconds();
+            var dn = "AM";
+            if (hour >= 12) {
+                dn = "PM";
+            }
+
+            month = month + 1;
+            month < 10 ? month = '0' + month : month;
+            hour < 10 ? hour = '0' + hour : hour;
+            minutes < 10 ? minutes = '0' + minutes : minutes;
+            second < 10 ? second = '0' + second : second;
+            var now_time = year + '年' + month + '月' + date + '日' + ' ' + show_day[day] + ' ' + hour + ':' + minutes + ':' + second + " " + dn;
+            document.getElementById('showtime').innerHTML = now_time;
+            setTimeout("showTime();", 1000);
+        }
+
+    </script>
+
+
+    <!-- css 预留版块，提供给子模板扩展 -->
+    {% block css %}{% endblock %}
+</head>
+
+
+<body onload="showTime()">
+<!-- 导航栏 可自行扩展 -->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('news.indexView') }}"><span
+                    class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;首&nbsp;&nbsp;页&nbsp;&nbsp;</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#" id="showtime"><span class="sr-only">(current)</span></a></li>
+                <!--  左下拉菜单start  -->
+                {#        <li class="dropdown">#}
+                {#          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>#}
+                {#          <ul class="dropdown-menu">#}
+                {#            <li><a href="#">Action</a></li>#}
+                {#            <li><a href="#">Another action</a></li>#}
+                {#            <li><a href="#">Something else here</a></li>#}
+                {#            <li role="separator" class="divider"></li>#}
+                {#            <li><a href="#">Separated link</a></li>#}
+                {#            <li role="separator" class="divider"></li>#}
+                {#            <li><a href="#">One more separated link</a></li>#}
+                {#          </ul>#}
+                {#        </li>#}
+                <!--  左下拉菜单end  -->
+
+            </ul>
+            <form class="navbar-form navbar-left" action="{{ url_for('news.search') }}" method="POST">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search" name="search">
+                </div>
+                <button type="submit" class="btn btn-default">搜&nbsp;&nbsp;索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                {% if session.username %}
+                    {% if session.img_url %}
+                        <li><a href="#"><img src="{{ session.img_url }}" style="height: 20px"></a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('user.uploadShowView') }}"><span class="glyphicon glyphicon-user"></span>头像上传</a></li>
+
+                    {% endif %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">{{ session.username }}<span class="caret"></span></a>
+                        <ul class="dropdown-menu" style="font-size: medium">
+                            <li><a href="{{ url_for('user.userInfoView') }}"><span class="glyphicon glyphicon-th-list" style="margin-right: 20px;margin-top: 10px"></span>我的信息</a></li>
+                            <li><a href="{{ url_for('collection.showView') }}"><span class="glyphicon glyphicon-file" style="margin-right: 20px;margin-top: 10px"></span>我的收藏</a></li>
+                            <li><a href="{{  url_for('news.todayHotNews')}}"><span class="glyphicon glyphicon-signal" style="margin-right: 20px;margin-top: 10px"></span>今日热点</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ url_for('user.logoutView') }}"><span class="glyphicon glyphicon-off"style="margin-right: 35px"></span>注销</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li><a href="{{ url_for('news.indexView') }}">请登录</a></li>
+                {% endif %}
+
+                {% if is_login %}
+                <li><a><img src="{{ avatar }}" style="height: 20px"></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{{ username }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu" >
+                        <li><a href="{{ url_for('githubuser.get_user') }}">API</a> </li>
+                        <li><a href="{{ url_for('githubuser.star') }}" >Repo </a></li>
+                        <li><a  href="{{ url_for('githubuser.logout') }}">注销</a></li>
+                    </ul>
+
+                {% else %}
+                    <li><a href="{{ url_for('githubuser.login') }}"><img src="{{ url_for('static',filename='logo/github.gif') }}" style="height: 20px;"></a></li>
+                {% endif %}
+
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+<div class="row clearfix">
+    <div class="col-md-12">
+        <div >
+            <!-- content 预留版块，提供给子模板扩展 -->
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+
+<!--网站底部-->
+<div class="col-md-12">
+    <footer class="text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        ©&nbsp;2018&nbsp;1000phone.com&nbsp;xICP备 by universe_news
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- js 预留版块，提供给子模板扩展 -->
+{% block js %}{% endblock %}
+</body>
+</html>

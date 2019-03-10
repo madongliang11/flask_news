@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="http://uc-vs.bdimg.com/v4/20181107x2/asset/home/css/main.css">
+    <style type="text/css">
+        body {
+            background: whitesmoke;
+        }
+
+        #img img {
+            height: 200px;
+            width: 250px;
+            margin-top: 1%;
+            margin-left: 10px;
+        }
+
+        #img div {
+            width: 250px;
+            margin-top: 2%;
+            margin-left: 10px;
+            text-align: center;
+        }
+
+        #chao a {
+            text-decoration: none;
+            color: black;
+            margin-left: 20px;
+            position: relative;
+            top: 15px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+        $('#myTabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show')
+        });
+
+        function info() {
+            $('#alt').show();
+        }
+
+        function drop() {
+            $('#alt').hide();
+        }
+
+    </script>
+{% endblock %}
+{% block content %}
+
+    <div style="" class="col-md-offset-1">
+    <!--超链接区-->
+    <div style="width: 90%;height:40px;border: lightgrey solid 1px;background: white">
+         {% for tag in tags %}
+            <a style="text-decoration: none" href="{{ url_for('news.classifyView') }}?tid={{ tag.id }}">{{ tag.t_name }}
+                &nbsp&nbsp&nbsp <span style="color: lightgrey">|&nbsp&nbsp&nbsp</span></a>
+        {% endfor %}
+    </div>
+
+    <!--用户区-->
+    <div style="background: white;width: 20%;height: 280px;border: lightgrey solid 1px;margin-top: 10px;display: inline-block">
+
+    <!--用户头像-->
+    <div style="width: 70%;height:70%;margin-left: 15%;text-align: center">
+        <a href="{{ url_for('user.uploadShowView') }}">
+            <div onmouseover="info()" onmouseleave="drop()"
+                 style="width: 75%;height: 65%;margin-left: 12.5%;margin-top: 15%">
+                <img class="img-thumbnail" src="{{ user.img_url }}">
+                <div id="alt"
+                     style="background: #5e5e5e; opacity: 0.7;position: relative;top: -24px;height:25px;width:100%;display: none;color: white">
+                    更改图片
+                </div>
+            </div>
+        </a>
+        <div style="text-align: center;margin-top: 5%">
+            <h4>{{ user.username }}</h4>
+        </div>
+    </div>
+
+    <!--密码修改及订阅中心-->
+    <div style="width: 90%;border-top:dodgerblue solid 1px;margin-left: 5%;margin-top:-5%;height: 25%;text-align: center;color: black">
+        <div style="margin-top: 10%">
+            <a href="{{ url_for('user.uploadShowView') }}">
+                <div style="width: 50%;border-right: lightgrey dotted 1px;display: inline-block">
+                    <a href="{{ url_for('collection.showView') }}">订阅中心</a>
+                </div>
+            </a>
+            <div style="width: 50%;float: right">
+                <a href="{{ url_for('user.passwordChangeView') }}?id={{ user.id }}">密码修改</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!--其他区-->
+        <div id="img"
+             style="background: white;width: 70%;height: 280px;border: lightgrey solid 1px;border-left:none;margin-top: 10px;margin-left:-4px;float: right;margin-right: 10%">
+            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1543572339&di=f7fac3621aa5e4e88dc5fa05bc6ab874&imgtype=jpg&er=1&src=http%3A%2F%2Fs3.sinaimg.cn%2Fmw690%2F002hFK56gy6THuxxUjw22%26amp%3Bamp%3B690"
+                 class="img-thumbnail">
+            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542977534330&di=27832cf25925e4955eeff7926b3de62f&imgtype=0&src=http%3A%2F%2Fimg17.3lian.com%2Fd%2Ffile%2F201703%2F13%2Fa2e9bf2c4470e1e5a8ec5928e40e5d8e.jpg"
+                 class="img-thumbnail">
+            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542977425124&di=e477789453f826e30c2ff80e53502277&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-12-06%2F5a27d037376f4.jpg"
+                 class="img-thumbnail">
+            <div style="display: inline-block">岁月轮回 我们在寻觅什么</div>
+            <div style="display: inline-block">可爱萌宠喵星人</div>
+            <div style="display: inline-block">问世间 转过多少流年 ...</div>
+        </div>
+
+
+    <!--分页标签区-->
+    <div style="background: white;width: 90%;height:280px;border: lightgrey solid 1px;margin-top: 15px">
+        <div style="margin-top: 20px">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
+                                                          data-toggle="tab">Funs</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Chicken Soup</a>
+                </li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab"
+                                           data-toggle="tab">Messages</a>
+                </li>
+                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab"
+                                           data-toggle="tab">Music</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <ul style="margin-left:40px;width: 40%">
+                        <li>
+                            前些天嗓子病了，不能发声，领导却让我参加合唱比赛，给我说充个数就行。
+                            我感觉这样不好，就积极治疗，赶在比赛前治好了。 结果比赛失利，领导一
+                            声叹息的道：“你怎么偏偏赶在这时候嗓子好了呢？”
+                        </li>
+                    </ul>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="messages">...</div>
+                <div role="tabpanel" class="tab-pane" id="settings">
+                    <div style="margin-top: 1%">
+                        <div style="display: inline-block;width: 70px;">独孤天下:</div>
+                        <div style="margin-top: 10px">
+                        <audio controls style="">
+                            <source src="horse.ogg" type="audio/ogg">
+                            您的浏览器不支持 audio 元素。
+                        </audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

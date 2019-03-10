@@ -1,0 +1,160 @@
+{% extends 'admin/index.html' %}
+
+{% block body %}
+
+    <div id="page-wrapper">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">统计图表</h3>
+        </div>
+    </div>
+
+    {#  柱状图  #}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="container" id="container_pic_module_column"></div>
+        </div>
+    </div>
+
+    {#  饼状图  #}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="container" id="container_pic_module_pie"></div>
+        </div>
+    </div>
+
+    {#  3D图  #}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="container" id="container_pic_module_3Dcloum"></div>
+        </div>
+    </div>
+
+</div>
+<script src="{{ url_for('static',filename='bootstrap/js/jquery-1.12.4.min.js') }}"></script>
+<script src="{{ url_for('static',filename='hchart/highcharts.js') }}"></script>
+<script src="{{ url_for('static',filename='hchart/modules/exporting.js') }}"></script>
+<script src="{{ url_for('static',filename='hchart/highcharts-3d.js') }}"></script>
+<script language="JavaScript">
+   $(function () {
+        $('#container_pic_module_column').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '按标签分类-柱形图'
+            },
+            xAxis: {
+                categories: [
+                    {% for tag in tags %}
+                        "{{ tag.t_name }}",
+                    {% endfor %}
+                    ]
+                 },
+            yAxis: {
+                min: 0,
+                alternateGridColor: '#FDFFD5',
+                title: {
+                    text: '书籍数量'
+                }
+            },
+            {#针对不同类型图表的配置#}
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '文章数量',
+                data: [
+                    {% for tag in tags %}
+                        tag.news_count,
+                    {% endfor %}
+                ]
+            }]
+        });
+
+
+        $('#container_pic_module_pie').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: '按标签分类-圆饼图'
+            },
+            {#数据点提示框，当鼠标滑过某点时，以框的形式提示改点的数据，比如该点的值，数据单位等#}
+            tooltip: {
+                pointFormat: '{series.name}:<b>{point.percentage:.1f}%</b>'
+            },
+            {#数据列，图表上一个或多个数据系列，比如图表中的一条曲线，一个柱形#}
+            series: [{
+                type: 'pie',
+                name: '文章百分比',
+                data:
+                    [
+                        {% for tag in tags %}
+                            ["{{tag.t_name}}", {{tag.news_count}}],
+                        {% endfor %}
+                    ]
+            }]
+        });
+
+        {#$('#container_pic_module_3Dcloum').highcharts({#}
+        {#    chart: {#}
+        {#        type: 'column',#}
+        {#        options3d: {#}
+        {#            enabled: true,#}
+        {#            alpha: 15,#}
+        {#            beta: 15,#}
+        {#            viewDistance: 25,#}
+        {#            depth: 40#}
+        {#        },#}
+        {#        marginTop: 80,#}
+        {#        marginRight: 40#}
+        {#    },#}
+        {#    title: {#}
+        {#        text: '以评分划分的标签的文章总量'#}
+        {#    },#}
+        {#    xAxis: {#}
+        {#        categories: [1,2,3,4,5,6,7,8,9,10]#}
+        {#    },#}
+        {#    yAxis: {#}
+        {#        allowDecimals: false,#}
+        {#        min: 0,#}
+        {#        title: {#}
+        {#            text: '文章数量'#}
+        {#        }#}
+        {#    },#}
+        {#    tooltip: {#}
+        {#        headerFormat: '<b>{point.key}</b><br>',#}
+        {#        pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'#}
+        {#    },#}
+        {#    plotOptions: {#}
+        {#        column: {#}
+        {#            stacking: 'normal',#}
+        {#            depth: 40#}
+        {#        }#}
+        {#    },#}
+        {#    series: [#}
+        {#        {% for tag in tags %}#}
+        {#            {#}
+        {#                name: '{{ tag.t_name }}',#}
+        {#                data: [#}
+        {#                    {% for hot_num in tag.hot_nums %}#}
+        {#                        {{ hot_num.hot_num }},#}
+        {#                    {% endfor %}#}
+        {#                ],#}
+                        {#stack: 'male'#}
+        {#            },#}
+        {#        {% endfor %}#}
+        {##}
+        {#    ]#}
+        {#{)#}
+
+    });
+
+</script>
+
+{% endblock %}

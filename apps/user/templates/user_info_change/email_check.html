@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div style="width: 60%;height: 300px;margin-left:17%;margin-top: 20px;">
+
+        <!--关心语句-->
+        <div class="col-sm-offset-1">
+            <h3 style="display: inline-block;margin-left: -5px">亲爱的用户:</h3>
+        </div>
+        <div style="color: green;font-size: large;" class="col-sm-8 col-sm-offset-2">输入邮箱地址即可修改密码</div>
+
+        <!--用户注册-->
+        <form class="form-horizontal" style="margin-top: 40px" role="form" action="{{ url_for('user.emailSendView') }}"
+              method="post">
+
+            <!--email-->
+            <div class="form-group">
+                <label for="email" class="col-sm-2 control-label" style="font-size:large">邮箱</label>
+                <div class="col-sm-8">
+                    <input type="text" style="width: 91%;display: inline-block" name="email" class="form-control" id="email" placeholder="邮箱">
+                    {% if msg %}
+                    <div style="color: red;">{{ msg }}</div>
+                    {% endif %}
+                    <!--验证反馈信息-->
+                    <span id="emailRight" style="color: green;font-style: italic;width: 9%;display: none">good!</span>
+                    <div id="emailError" style="color: red;display: none">错误的邮箱格式</div>
+                </div>
+            </div>
+
+            <!--提示信息-->
+            <div id="info" class="col-sm-8 col-sm-offset-2" style="color: red;height: 36px;display: none" >
+                我们将为您发送一封邮件用于验证,请注意查收
+            </div>
+
+            <!--注册提交-->
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" id="register" disabled class="btn btn-info">提交</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            //(动态输入时检查)邮箱验证
+            $("#email").on('input', function () {
+                var regemail = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                var uemail = $("#email").val();
+                if (uemail.length <= 0 || !regemail.test(uemail)) {
+                    $("#emailRight").hide();
+                    $("#emailError").show();
+                } else {
+                    $("#emailRight").show();
+                    $("#emailError").hide();
+                };
+                //验证通过,允许提交
+                if ($('#emailRight').is(':visible')) {
+                    $('#info').show();
+                    $('#register').removeAttr("disabled");
+                }
+            });
+
+        })
+
+    </script>
+{% endblock %}

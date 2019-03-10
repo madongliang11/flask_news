@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <h1 style="color: red">搜索关键词： "{{query}}"</h1>
+
+    {% for result in results %}
+    <div class="col-md-11" style="margin-bottom: 30px">
+        <div class="text-center"><img src="{{ result.img_url }}" style="width: 500px"></div>
+        <div style="font-size: 30px" >{{ result.title }}</div>
+        <div style="font-size: 20px">{{ result.content }}</div>
+    </div>
+    {% endfor %}
+
+
+
+{% endblock %}

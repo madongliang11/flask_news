@@ -1,0 +1,255 @@
+{% extends 'index_base.html' %}
+{% block css %}
+    <style>
+        /* Custom Styles */
+        ul.nav-tabs {
+            width: 150px;
+            height: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block catagory %}
+    <div style="width: 100%;background-color: green;">
+        <div class="col-xs-3" id="myScrollspy">
+            <div>
+                <ul class="nav nav-tabs nav-stacked" data-offset-top="125">
+                    <li><img src="/static/logo/logo.jpg" style="width: 145px;height: 100px"></li>
+                    {% for tag in tags %}
+                        <li class="bg-info"><a href="#" style="height:70px;font-size: 29px"
+                                               class="text-center">{{ tag.t_name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block banner %}
+    <div style="width: 100%;height:400px;background-color: #5bc0de;">
+        <div id="slidershow" class="carousel slide" data-ride="carousel"
+             style="position: relative;clear: both">
+            <!-- 设置图片轮播的顺序 -->
+            <ol class="carousel-indicators">
+                <li class="active" data-target="#slidershow" data-slide-to="0">
+                <li data-target="#slidershow" data-slide-to="1">
+                <li data-target="#slidershow" data-slide-to="2">
+            </ol>
+            <!-- 设置轮播图片 -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <a href="#"><img src="{{ url_for('static',filename='banner/1.jpg') }}"
+                                     style="height: 400px;width: 100%"></a>
+                    <div class="carousel-caption" style="font-size: large">习近平同巴布亚新几内亚总理奥尼尔会谈</div>
+                </div>
+                <div class="item">
+                    <a href="#"><img src="{{ url_for('static',filename='banner/2.jpg') }}"
+                                     style="height: 400px;width: 100%"></a>
+                    <div class="carousel-caption" style="font-size: large">青海西宁降下大雪 道路结冰影响市民出行</div>
+                </div>
+                <div class="item">
+                    <a href="#"><img src="{{ url_for('static',filename='banner/3.jpg') }}"
+                                     style="height: 400px;width: 100%"></a>
+                    <div class="carousel-caption" style="font-size: large">5岁男孩一次做4105个俯卧撑 获赠奔驰车</div>
+                </div>
+            </div>
+            <!-- 设置轮播图片控制器 -->
+            <a class="left carousel-control" href="#slidershow" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#slidershow" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block newslist %}
+    <div style="width: 100%;height:1000px;">
+        {#        {% for new in news %}#}
+        {#            <div>#}
+        {#                <img src="{{ new.img_url }}" style="width: 100%;">#}
+        {#                <div><h3>{{ new.title }}</h3></div>#}
+        {#            </div>#}
+        {#        {% endfor %}#}
+        <table class="table">
+            {% for new in news %}
+                <tr>
+                    <th  class="col-md-3" ><a href="{{ url_for('news.detailView') }}?id={{ new.id }}"><img src="{{ new.img_url }}" style="height: 100px;width: 158px"></a></th>
+                    <th  class="col-md-9" ><a href="{{ url_for('news.detailView') }}?id={{ new.id }}"><h3 >{{ new.title }}</h3></a></th>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
+
+
+{% block user %}
+    <div style="width:100%;height: auto;">
+        <div style="width:100%">
+            <div style="width:100%;height: auto;border: lightgray solid 1px;border-radius:4px;">
+                <form class="navbar-form navbar-left" style="width: inherit;padding: 0;">
+                    <div class="form-group" style="display: inline-block;width: 69%;margin-left: 10px">
+                        <input type="text" class="form-control" placeholder="搜索" style="width:100%">
+                    </div>
+                    <button type="submit" class="btn btn-default" style="margin-right: 10px;margin-left:3px;width: 20%"><span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </form>
+                <br>
+                <br>
+                <br>
+                <div style="margin-top:-9px;border-top: lightgray solid 1px;">
+                    <div style="width: inherit;height: 30px;text-align: center;">
+                        <h4><strong>账号密码登陆</strong></h4>
+                    </div>
+                    <form class="form-horizontal" role="form" style="width: inherit;padding: 0;" action="{{ url_for('test.loginView') }}" method="post">
+                        <div class="form-group" style="width: 100%;margin: 0">
+                            <label for="firstname" class="col-sm-4 control-label" style="width:32%;margin: 0;">用户名:</label>
+                            <input type="text" style="width: 64%;" class="form-control" id="firstname" placeholder="请输入用户名" name="username">
+                        </div>
+                        <div class="form-group" style="width: 100%;margin: 0;margin-top: 7px">
+                            <label for="lastname" class="col-sm-4 control-label" style="width:32%;display: inline-block">密码:</label>
+                            <input type="text" style="width: 64%" class=" form-control" id="lastname" placeholder="请输入密码" name="password">
+                        </div>
+                        <div  class="form-group" style="width: 100%;margin: 0;margin-top: 7px">
+                            <label  class="col-sm-4 control-label" style="width:32%;display: inline-block">验证码</label>
+                            <input type="text" style="width: 64%" class="form-control" id="code1" placeholder="请输入验证码" name="code_text">
+                            <img id="code" src="{{ url_for('test.code') }}" onclick="ajax1()" style="margin-left: 90px;margin-top: 10px">
+                            <p style="margin-left: 50px">点击图片即可刷新验证码</p>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox">请记住我
+                                        <a href="{{ url_for('user.emailSendView')}}" style="text-decoration: none;margin-left: 7px"><span>忘记密码?</span></a>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-info">登录</button>
+                                <a href="{{ url_for('user.registerView') }}" style="margin-left: 5px">
+                                    <button type="button" class="btn btn-default">注册</button>
+                                </a>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+        function ajax1() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{{ url_for('test.code') }}",true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4){
+                    $('#code').attr('src',"{{ url_for('test.code') }}?"+Math.random())
+                }
+            };
+            xhr.send()
+        }
+    </script>
+{% endblock %}
+
+{% block hot %}
+    <div style="width:100%;height: 800px;background-color: yellow">
+
+    {#  测试富文本  #}
+    <div>
+    <h1>完整demo</h1>
+    <textarea id="content" class="ckeditor"></textarea>
+    </div>
+
+    <script type="text/javascript">
+    CKEDITOR.replace('content', {
+    filebrowserUploadUrl: '/ckupload/',
+    });
+    </script>
+
+        <div class="pane-module hot-words-pane">
+            <a class="list-group-item active">
+                <h4 style="font-weight:bold">热搜新闻</h4>
+            </a>
+            <a href="https://m.toutiao.com/search/?keyword=%E6%B2%B9%E4%BB%B7%20%E5%9B%9B%E5%B9%B4%E6%9C%80%E5%A4%A7%E8%B7%8C%E5%B9%85&from=gs_hotlist"
+               class="list-group-item">1 油价 四年最大跌幅</a>
+            <a href="https://m.toutiao.com/search/?keyword=%E6%B4%97%E5%AE%8C%E5%A4%B4%E7%BB%93%E8%B4%A617000%E5%85%83&from=gs_hotlist"
+               class="list-group-item">2 洗完头结账17000元</a>
+            <a href="https://m.toutiao.com/search/?keyword=%E9%A9%AC%E8%93%89%E5%86%8D%E5%96%8A%E8%AF%9D%E7%8E%8B%E5%AE%9D%E5%BC%BA&from=gs_hotlist"
+               class="list-group-item">3 马蓉再喊话王宝强</a>
+            <a href="https://m.toutiao.com/search/?keyword=%E8%81%82%E6%A0%91%E6%96%8C%E6%AF%8D%E4%BA%B2%E5%8F%91%E5%A3%B0&from=gs_hotlist"
+               class="list-group-item">4 聂树斌母亲发声</a>
+            <a href="https://m.toutiao.com/search/?keyword=%E9%82%93%E8%B6%85%E5%AD%99%E4%BF%AA%20%E9%87%91%E9%A9%AC%E5%A5%96&from=gs_hotlist"
+               class="list-group-item">5 邓超孙俪 金马奖
+                <img src="//s3.pstatp.com/toutiao/static/img/icon_hot_search_t2.4c778ee.png" alt style="float: right"
+                     height="20px">
+            </a>
+            <a href="https://m.toutiao.com/search/?keyword=%E5%A9%9A%E7%A4%BC%E7%8E%B0%E5%9C%BA%E7%88%86%E7%82%B8%E8%87%B41%E6%AD%BB&from=gs_hotlist"
+               class="list-group-item">6 婚礼现场爆炸致1死</a>
+            <a href="https://m.toutiao.com/search/?keyword=%E6%9D%A8%E7%B4%AB%E7%A9%BF%E9%AB%98%E8%B7%9F%E9%9E%8B%E6%91%94%E5%80%92&from=gs_hotlist"
+               class="list-group-item">7 杨紫穿高跟鞋摔倒
+                <img src="//s3.pstatp.com/toutiao/static/img/icon_hot_search_t2.4c778ee.png" alt style="float: right"
+                     height="20px">
+            </a>
+        </div>
+        <div class="pane-module hot-words-pane">
+            <a class="list-group-item active">
+                <h4 style="font-weight:bold">24小时热闻</h4></a>
+            <a href="https://www.toutiao.com/group/6624658828648513795/" class="list-group-item">
+                <div class="media">
+                    <div class="media-left">
+                        <img src="//p99.pstatp.com/list/240x240/da930002dd377261adf6" class="media-object"
+                             style="width:60px"></div>
+                    <div class="media-body" style="padding: 10px">
+                        选三缸福克斯还是四缸高尔夫？广州车展找答案
+                    </div>
+                </div>
+            </a>
+            <a href="https://www.toutiao.com/group/6618359724360335620/" class="list-group-item">
+                <div class="media">
+                    <div class="media-left">
+                        <img src="https://p3.pstatp.com/list/240x240/dab70000a6710e337062" class="media-object"
+                             style="width:60px">
+                    </div>
+                    <div class="media-body" style="padding: 10px">
+                        2018今日头条生机大会
+                    </div>
+                </div>
+            </a>
+            <a href="https://www.toutiao.com/group/6624417815111696904/" class="list-group-item">
+                <div class="media">
+                    <div class="media-left">
+                        <img src="https://p1.pstatp.com/list/240x240/pgc-image/a452e01cdcfe41b386cbe0c807f20e4c"
+                             class="media-object"
+                             style="width:60px">
+                    </div>
+                    <div class="media-body" style="padding: 10px">
+                        易到回应高管给CEO磕头风波：遭险恶有预谋饭局 已向警方报案
+                    </div>
+                </div>
+            </a>
+            <a href="https://www.toutiao.com/group/6624687499392320007/" class="list-group-item">
+                <div class="media">
+                    <div class="media-left">
+                        <img src="https://p1.pstatp.com/list/240x240/pgc-image/R9dA5RDFlzBJyu" class="media-object"
+                             style="width:60px">
+                    </div>
+                    <div class="media-body" style="padding: 10px">
+                        枪枪毙命：美国德州农场主用夜视仪狙击枪击毙45头郊狼
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+<script type="text/javascript">
+    $(window).height()
+
+</script>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>激活邮件</title>
+</head>
+<body>
+<h2>{{ username }}你好,欢迎来到新闻网邮件激活</h2>
+<a href="{{ url_for('test.activeEmailView') }}?token={{ token }}">立即激活</a>
+</body>
+</html>

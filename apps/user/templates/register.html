@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div style="width: 60%;height: auto;margin-left:17%;margin-top: 20px">
+
+        <!--欢迎语句-->
+        <span style="text-align: center;"><h1>欢迎来到用户注册系统</h1></span>
+
+        <!--用户注册-->
+        <form class="form-horizontal" role="form" action="{{ url_for('user.registerView') }}" method="post">
+
+            <!--用户名-->
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label" style="font-size:large">用户名</label>
+                <div class="col-sm-8">
+                    <input type="text" style="width: 91%;display: inline-block" name="username" class="form-control" id="username" placeholder="请输入用户名">
+                    <!--验证反馈信息-->
+                    <div style="color: red;display: none" id="msg">该用户名已被注册</div>
+                    <span id="usernameRight" style="color: green;font-style: italic;width: 9%;display: none">good!</span>
+                    <div id="usernameError" style="color: red;display: none">用户名只能包含字母/数字/下划线,且不能以数字开头,长度在6～12位
+                    </div>
+                </div>
+            </div>
+
+
+            <!--密码-->
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label" style="font-size:large">密码</label>
+                <div class="col-sm-8">
+                    <input type="password" style="width: 91%;display: inline-block" name="password" class="form-control" id="password" placeholder="请输入密码">
+                    <!--验证反馈信息-->
+                    <span id="passwordRight" style="color: green;font-style: italic;width: 9%;display: none">good!</span>
+                    <div id="passwordError" style="color: red;display: none">密码只能包含字母/数字/下划线,长度在6～12位</div>
+                </div>
+            </div>
+
+            <!--确认密码-->
+            <div class="form-group">
+                <label for="repassword" class="col-sm-2 control-label" style="font-size:large">确认密码</label>
+                <div class="col-sm-8">
+                    <input type="password" style="width: 91%;display: inline-block" name="repassword" class="form-control" id="repassword" placeholder="请再次输入密码">
+                    <!--验证反馈信息-->
+                    <span id="repasswordRight" style="color: green;font-style: italic;width: 9%;display: none">good!</span>
+                    <div id="repasswordError" style="color: red;display: none">两次输入的密码不一致</div>
+                </div>
+            </div>
+
+            <!--email-->
+            <div class="form-group">
+                <label for="email" class="col-sm-2 control-label" style="font-size:large">邮箱</label>
+                <div class="col-sm-8">
+                    <input type="text" style="width: 91%;display: inline-block" name="email" class="form-control" id="email" placeholder="邮箱">
+                    <!--验证反馈信息-->
+                    <span id="emailRight" style="color: green;font-style: italic;width: 9%;display: none">good!</span>
+                    <div id="emailError" style="color: red;display: none">错误的邮箱格式</div>
+                </div>
+            </div>
+
+            <!--phone-->
+            <div class="form-group">
+                <label for="phone" class="col-sm-2 control-label" style="font-size:large">电话</label>
+                <div class="col-sm-8">
+                    <input type="text" style="width: 91%;display: inline-block" name="phone" class="form-control" id="phone" placeholder="电话">
+                    <!--验证反馈信息-->
+                    <span id="phoneRight" style="color: green;font-style: italic;width: 9%;display: none">good!</span>
+                    <div id="phoneError" style="color: red;display: none">无效的号码</div>
+                </div>
+            </div>
+
+            <!--请记住我-->
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox">请记住我
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!--注册提交-->
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" id="register" disabled class="btn btn-info">注册</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript">
+
+        $(function () {
+            //检查用户名可用性(是否已被注册)
+            $('#username').blur(function () {
+                $('#msg').hide();
+                //定义睡眠函数
+                var t = Date.now();
+                function sleep(d) {
+                    while (Date.now - t <= d) ;
+                };
+                sleep(2000);
+                var name = $("#username").val();
+                var data = {"name": name};
+                $.post('/user/ajax/', data, function (data) {
+                    if (data) {
+                        $('#msg').show();
+                        $('#usernameError').hide();
+                        $('#usernameRight').hide();
+                    }
+                });
+            });
+
+            //(动态输入时检查)用户名验证
+            $("#username").on('input', function () {
+                $('#msg').hide();
+                var regtitle = /^[a-zA-Z][a-zA-Z0-9_]{5,11}$/;
+                var uname = $("#username").val();
+                if (uname.length <= 0 || !regtitle.test(uname)) {
+                    $("#usernameRight").hide();
+                    $("#usernameError").show();
+                } else {
+                    $("#usernameRight").show();
+                    $("#usernameError").hide();
+                }
+            });
+
+            //(动态输入时检查)密码验证
+            $("#password").on('input', function () {
+                var regtitle = /^[a-zA-Z0-9_]{6,12}$/;
+                var uname = $("#password").val();
+                if (uname.length <= 0 || !regtitle.test(uname)) {
+                    $("#passwordRight").hide();
+                    $("#passwordError").show();
+                } else {
+                    $("#passwordRight").show();
+                    $("#passwordError").hide();
+                }
+
+                //(用户调用历史记录时)检查用户名合法性
+                var regtitle1 = /^[a-zA-Z][a-zA-Z0-9_]{5,11}$/;
+                var uname1 = $("#username").val();
+                if (uname1.length <= 0 || !regtitle1.test(uname1)) {
+                    $("#usernameRight").hide();
+                } else {
+                    $("#usernameRight").show();
+                    $("#usernameError").hide();
+                }
+
+                //(用户调用历史记录时)邮箱合法性
+                var regemail1 = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                var uemail1 = $("#email").val();
+                if (uemail1.length <= 0 || !regemail1.test(uemail1)) {
+                    $("#emailRight").hide();
+                } else {
+                    $("#emailRight").show();
+                    $("#emailError").hide();
+                }
+
+                //(用户调用历史记录时)电话合法性
+                var regphone1 = /^1[34578]\d{9}$/;
+                var uphone1 = $("#phone").val();
+                if (uphone1.length <= 0 || !regphone1.test(uphone1)) {
+                    $("#phoneRight").hide();
+                } else {
+                    $("#phoneRight").show();
+                    $("#phoneError").hide();
+                }
+            });
+
+            //(动态输入时检查)确认密码
+            $("#repassword").on('input', function () {
+                var pwd = $("#password").val();
+                var repwd = $("#repassword").val();
+                if (pwd !== repwd || repwd.length <= 0) {
+                    $("#repasswordRight").hide();
+                    $("#repasswordError").show();
+                } else {
+                    $("#repasswordRight").show();
+                    $("#repasswordError").hide();
+                }
+            });
+
+            //(动态输入时检查)邮箱验证
+            $("#email").on('input', function () {
+                var regemail = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                var uemail = $("#email").val();
+                if (uemail.length <= 0 || !regemail.test(uemail)) {
+                    $("#emailRight").hide();
+                    $("#emailError").show();
+                } else {
+                    $("#emailRight").show();
+                    $("#emailError").hide();
+                }
+            });
+
+            //(动态输入时检查)电话号码验证
+            $("#phone").on('input', function () {
+                var regphone = /^1[34578]\d{9}$/;
+                var uphone = $("#phone").val();
+                if (uphone.length <= 0 || !regphone.test(uphone)) {
+                    $("#phoneRight").hide();
+                    $("#phoneError").show();
+                } else {
+                    $("#phoneRight").show();
+                    $("#phoneError").hide();
+                }
+            });
+
+            //以上全部通过,允许注册
+            $('input').on('input', function () {
+                if ($('#usernameRight').is(':visible') && $('#passwordRight').is(':visible') &&
+                    $('#repasswordRight').is(':visible') && $('#emailRight').is(':visible') &&
+                    $('#phoneRight').is(':visible')) {
+                    $('#register').removeAttr("disabled");
+                }
+            });
+
+        })
+
+    </script>
+{% endblock %}

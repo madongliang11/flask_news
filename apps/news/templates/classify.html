@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+
+{#内容模块#}
+{% block content %}
+    <div class="text-center col-md-offset-1" style="width: 100%">
+        {% for new in news %}
+             <div style="margin-bottom: 20px" class="clearfix">
+                    <img src="{{ new.img_url }}" class="pull-left" style="height: 200px;width: 300px">
+                    <div class="pull-left" style="margin-left: 50px ;margin-top: 75px;font-size: 20px"><a style="text-decoration: none" href="{{ url_for('news.detailView')}}?nid={{ new.id }} " >{{ new.title }}</a></div>
+             </div>
+        {% endfor %}
+
+        {#分页按钮组#}
+         <ul class="pagination " >
+            {% if pagination.has_prev %}
+                <li class="page-item active"><a class="page-link" href="{{ url_for('news.classifyView')}}?tid={{ tid }}&page={{ pagination.page - 1 }}">上一页</a></li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" href="#">上一页</a></li>
+            {% endif %}
+
+            {% for page in pagination.iter_pages(4) %}
+                {% if page %}
+                    <li class="page-item {% if page==pagination.page %}active{% endif %}"><a class="page-link" href="{{ url_for('news.classifyView')}}?tid={{ tid }}&page={{ page }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">&hellip;</a></li>
+                {% endif %}
+
+            {% endfor %}
+
+            {% if pagination.has_next %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('news.classifyView')}}?tid={{ tid }}&page={{ pagination.page + 1 }}">下一页</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" href="#">下一页</a></li>
+            {% endif %}
+         </ul>
+    </div>
+{% endblock %}

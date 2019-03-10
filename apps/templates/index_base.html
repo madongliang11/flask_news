@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+     <div class="col-md-offset-1">
+        {#网站内容区#}
+        <div class="col-md-2">
+            <div>
+                <!-- catagory 预留版块，提供给子模板扩展 -->
+                {% block catagory %}{% endblock %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div>
+                <div>
+                    <!-- 轮播图 预留版块，提供给子模板扩展 -->
+                    {% block banner %}{% endblock %}
+                </div>
+                <div style="margin-top: 20px">
+                    <!-- 新闻展示 预留版块，提供给子模板扩展 -->
+                    {% block newslist %}{% endblock %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div>
+                <div>
+                    <!-- 用户登录注册,搜索预留版块，提供给子模板扩展 -->
+                    {% block user %}
+
+                    {% endblock %}
+                </div>
+                <div style="margin-top: 20px">
+                    <!-- 用户登录注册,搜索预留版块，提供给子模板扩展 -->
+                    {% block hot %}{% endblock %}
+                </div>
+            </div>
+        </div>
+     </div>
+
+{% endblock %}
+
+
+
+
+
+
+
